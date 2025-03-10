@@ -16,10 +16,13 @@ public class BankAccount {
     }
 
     public synchronized void withdraw(double amount) {
-        if (balance >= amount) {
+    	if(amount <=0){
+        	throw new IllegalArgumentException("Withdarwl amount must be a positive value.");
+        }else if (balance >= amount) {
             this.balance -= amount;
             System.out.println("Withdrawn: " + amount + " | Current Balance: " + balance);
-        } else {
+        }
+        else {
             System.out.println("Insufficient funds.");
         }
     }

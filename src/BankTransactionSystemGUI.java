@@ -15,7 +15,7 @@ public class BankTransactionSystemGUI {
         JPanel panel = new JPanel();
         JTextField depositField = new JTextField(10);
         JTextField withdrawField = new JTextField(10);
-        JLabel balanceLabel = new JLabel("Balance: " + account.getBalance());
+        JLabel balanceLabel = new JLabel("Balance: £" + account.getBalance());
 
         JButton depositButton = new JButton("Deposit");
         JButton withdrawButton = new JButton("Withdraw");
@@ -41,7 +41,8 @@ public class BankTransactionSystemGUI {
                 new Thread(() -> {
                     account.deposit(amount);
                     // Update the balance label on the EDT after deposit is done
-                    SwingUtilities.invokeLater(() -> balanceLabel.setText("Balance: " + account.getBalance()));
+                    SwingUtilities.invokeLater(() -> balanceLabel.setText("Balance: £" + account.getBalance()));
+                    depositField.setText("");
                 }).start();
             }
         });
@@ -54,7 +55,8 @@ public class BankTransactionSystemGUI {
                 new Thread(() -> {
                     account.withdraw(amount);
                     // Update the balance label on the EDT after withdrawal is done
-                    SwingUtilities.invokeLater(() -> balanceLabel.setText("Balance: " + account.getBalance()));
+                    SwingUtilities.invokeLater(() -> balanceLabel.setText("Balance: £" + account.getBalance()));
+                    depositField.setText("");
                 }).start();
             }
         });
