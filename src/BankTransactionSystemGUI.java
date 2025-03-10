@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class BankTransactionSystemGUI {
-    private static BankAccount account = new BankAccount(1000);
+    private static BankAccount account = new BankAccount(0);
 
     public static void main(String[] args) {
         // Create a frame for the GUI
@@ -33,23 +33,29 @@ public class BankTransactionSystemGUI {
         frame.add(panel);
         frame.setVisible(true);
 
-        // Action for deposit
+     // Action for deposit
         depositButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double amount = Double.parseDouble(depositField.getText());
-                new Thread(() -> account.deposit(amount)).start();
-                balanceLabel.setText("Balance: " + account.getBalance());
+                new Thread(() -> {
+                    account.deposit(amount);
+                    // Update the balance label on the EDT after deposit is done
+                    SwingUtilities.invokeLater(() -> balanceLabel.setText("Balance: " + account.getBalance()));
+                }).start();
             }
         });
 
-        // Action for withdrawal
+     // Action for withdrawal
         withdrawButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double amount = Double.parseDouble(withdrawField.getText());
-                new Thread(() -> account.withdraw(amount)).start();
-                balanceLabel.setText("Balance: " + account.getBalance());
+                new Thread(() -> {
+                    account.withdraw(amount);
+                    // Update the balance label on the EDT after withdrawal is done
+                    SwingUtilities.invokeLater(() -> balanceLabel.setText("Balance: " + account.getBalance()));
+                }).start();
             }
         });
     }
